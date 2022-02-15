@@ -1,6 +1,6 @@
 {
   "name": "@hbauer/avro",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Avro Developers <dev@avro.apache.org>",
   "description": "[LITE] JavaScript Avro implementation",
   "type": "module",
