@@ -1,72 +1,105 @@
-# Apache Avro™
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-[![test c][test c img]][test c]
-[![test c#][test c# img]][test c#]
-[![test c++][test c++ img]][test c++]
-[![test java][test java img]][test java]
-[![test javascript][test javascript img]][test javascript]
-[![test perl][test perl img]][test perl]
-[![test ruby][test ruby img]][test ruby]
-[![test python][test python img]][test python]
-[![test php][test php img]][test php]
+https://www.apache.org/licenses/LICENSE-2.0
 
-[![rust continuous integration][rust continuous integration img]][rust continuous integration]
-[![rust clippy check][rust clippy check img]][rust clippy check]
-[![rust security audit][rust security audit img]][rust security audit]
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
 
-[![codeql c#][codeql c# img]][codeql c#]
-[![codeql java][codeql java img]][codeql java]
-[![codeql javascript][codeql javascript img]][codeql javascript]
-[![codeql python][codeql python img]][codeql python]
+# Avro-js
 
------
+Pure JavaScript implementation of the [Avro specification](https://avro.apache.org/docs/current/spec.html).
 
-Apache Avro™ is a data serialization system.
+## Features
 
-Learn more about Avro, please visit our website at:
+- Fast! Typically twice as fast as JSON with much smaller encodings.
+- Full Avro support, including recursive schemas, sort order, and evolution.
+- Serialization of arbitrary JavaScript objects via logical types.
+- Unopinionated 64-bit integer compatibility.
+- No dependencies, `avro-js` even runs in the browser.
 
-  https://avro.apache.org/
+## Installation
 
-To contribute to Avro, please read:
+```bash
+$ npm install avro-js
+```
 
-  https://cwiki.apache.org/confluence/display/AVRO/How+To+Contribute
+`avro-js` is compatible with all versions of [node.js][] since `0.11` and major
+browsers via [browserify][].
 
-<!-- Arranged this way for easy copy-pasting and editor string manipulation -->
+## Documentation
 
-[test c]:          https://github.com/apache/avro/actions/workflows/test-lang-c.yml
-[test c#]:         https://github.com/apache/avro/actions/workflows/test-lang-csharp.yml
-[test c++]:        https://github.com/apache/avro/actions/workflows/test-lang-c++.yml
-[test java]:       https://github.com/apache/avro/actions/workflows/test-lang-java.yml
-[test javascript]: https://github.com/apache/avro/actions/workflows/test-lang-js.yml
-[test perl]:       https://github.com/apache/avro/actions/workflows/test-lang-perl.yml
-[test ruby]:       https://github.com/apache/avro/actions/workflows/test-lang-ruby.yml
-[test python]:     https://github.com/apache/avro/actions/workflows/test-lang-py.yml
-[test php]:        https://github.com/apache/avro/actions/workflows/test-lang-php.yml
+See `doc/` folder.
 
-[rust continuous integration]: https://github.com/apache/avro/actions/workflows/test-lang-rust-ci.yml
-[rust clippy check]:           https://github.com/apache/avro/actions/workflows/test-lang-rust-clippy.yml
-[rust security audit]:         https://github.com/apache/avro/actions/workflows/test-lang-rust-audit.yml
+## Examples
 
-[codeql c#]:         https://github.com/apache/avro/actions/workflows/codeql-csharp-analysis.yml
-[codeql java]:       https://github.com/apache/avro/actions/workflows/codeql-java-analysis.yml
-[codeql javascript]: https://github.com/apache/avro/actions/workflows/codeql-js-analysis.yml
-[codeql python]:     https://github.com/apache/avro/actions/workflows/codeql-py-analysis.yml
+Inside a node.js module, or using browserify:
 
-[test c img]:          https://github.com/apache/avro/actions/workflows/test-lang-c.yml/badge.svg
-[test c# img]:         https://github.com/apache/avro/actions/workflows/test-lang-csharp.yml/badge.svg
-[test c++ img]:        https://github.com/apache/avro/actions/workflows/test-lang-c++.yml/badge.svg
-[test java img]:       https://github.com/apache/avro/actions/workflows/test-lang-java.yml/badge.svg
-[test javascript img]: https://github.com/apache/avro/actions/workflows/test-lang-js.yml/badge.svg
-[test perl img]:       https://github.com/apache/avro/actions/workflows/test-lang-perl.yml/badge.svg
-[test ruby img]:       https://github.com/apache/avro/actions/workflows/test-lang-ruby.yml/badge.svg
-[test python img]:     https://github.com/apache/avro/actions/workflows/test-lang-py.yml/badge.svg
-[test php img]:        https://github.com/apache/avro/actions/workflows/test-lang-php.yml/badge.svg
+```javascript
+var avro = require('avro-js')
+```
 
-[rust continuous integration img]: https://github.com/apache/avro/actions/workflows/test-lang-rust-ci.yml/badge.svg
-[rust clippy check img]:           https://github.com/apache/avro/actions/workflows/test-lang-rust-clippy.yml/badge.svg
-[rust security audit img]:         https://github.com/apache/avro/actions/workflows/test-lang-rust-audit.yml/badge.svg
+- Encode and decode objects:
 
-[codeql c# img]:         https://github.com/apache/avro/actions/workflows/codeql-csharp-analysis.yml/badge.svg
-[codeql java img]:       https://github.com/apache/avro/actions/workflows/codeql-java-analysis.yml/badge.svg
-[codeql javascript img]: https://github.com/apache/avro/actions/workflows/codeql-js-analysis.yml/badge.svg
-[codeql python img]:     https://github.com/apache/avro/actions/workflows/codeql-py-analysis.yml/badge.svg
+  ```javascript
+  // We can declare a schema inline:
+  var type = avro.parse({
+    name: 'Pet',
+    type: 'record',
+    fields: [
+      {
+        name: 'kind',
+        type: { name: 'Kind', type: 'enum', symbols: ['CAT', 'DOG'] },
+      },
+      { name: 'name', type: 'string' },
+    ],
+  })
+  var pet = { kind: 'CAT', name: 'Albert' }
+  var buf = type.toBuffer(pet) // Serialized object.
+  var obj = type.fromBuffer(buf) // {kind: 'CAT', name: 'Albert'}
+  ```
+
+- Generate random instances of a schema:
+
+  ```javascript
+  // We can also parse a JSON-stringified schema:
+  var type = avro.parse('{"type": "fixed", "name": "Id", "size": 4}')
+  var id = type.random() // E.g. Buffer([48, 152, 2, 123])
+  ```
+
+- Check whether an object fits a given schema:
+
+  ```javascript
+  // Or we can specify a path to a schema file (not in the browser):
+  var type = avro.parse('./Person.avsc')
+  var person = { name: 'Bob', address: { city: 'Cambridge', zip: '02139' } }
+  var status = type.isValid(person) // Boolean status.
+  ```
+
+- Get a [readable stream][readable-stream] of decoded records from an Avro
+  container file (not in the browser):
+
+  ```javascript
+  avro
+    .createFileDecoder('./records.avro')
+    .on('metadata', function (type) {
+      /* `type` is the writer's type. */
+    })
+    .on('data', function (record) {
+      /* Do something with the record. */
+    })
+  ```
+
+[node.js]: https://nodejs.org/en/
+[readable-stream]: https://nodejs.org/api/stream.html#stream_class_stream_readable
+[browserify]: http://browserify.org/

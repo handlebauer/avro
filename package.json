@@ -1,0 +1,61 @@
+{
+  "name": "@hbauer/avro",
+  "version": "1.12.0-SNAPSHOT",
+  "author": "Avro Developers <dev@avro.apache.org>",
+  "description": "[LITE] JavaScript Avro implementation",
+  "type": "module",
+  "module": "./lib/index.mjs",
+  "main": "./lib/index.cjs",
+  "exports": {
+    "import": "./lib/index.mjs",
+    "require": "./lib/index.cjs",
+    "browser": "./lib/index.js"
+  },
+  "files": [
+    "LICENSE",
+    "NOTICE",
+    "lib",
+    "etc/browser"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apache/avro"
+  },
+  "contributors": [
+    {
+      "name": "Matthieu Monsch",
+      "email": "monsch@alum.mit.edu"
+    },
+    {
+      "name": "Quinn Slack",
+      "email": "sqs@cs.stanford.edu"
+    }
+  ],
+  "keywords": [
+    "avro",
+    "json"
+  ],
+  "prettier": "@hbauer/prettier-config",
+  "eslintConfig": {
+    "extends": "@hbauer/eslint-config"
+  },
+  "scripts": {
+    "test": "ava",
+    "build": "shx rm -rf ./lib && rollup -c",
+    "prepublishOnly": "npm run build",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@hbauer/eslint-config": "^1.4.1",
+    "@hbauer/prettier-config": "^1.1.0",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "ava": "^4.0.1",
+    "eslint": "^8.9.0",
+    "eslint-plugin-import": "^2.25.4",
+    "husky": "^7.0.4",
+    "prettier": "^2.5.1",
+    "rollup": "^2.67.2",
+    "shx": "^0.3.4"
+  },
+  "license": "Apache-2.0"
+}
