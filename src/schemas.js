@@ -195,7 +195,7 @@ class ArrayType extends Type {
       return false
     }
 
-    const b = true
+    let b = true
     let j
     if (cb) {
       // Slow path.
